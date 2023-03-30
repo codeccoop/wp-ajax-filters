@@ -1,0 +1,16 @@
+.ajax_mn_filters{
+    display: flex;
+    .ajax_mn_filter{
+        width: 200px;
+        .ms-drop{
+            position: relative;
+            ul li {
+                padding: 0;
+                height: 0px;
+                input{
+                    margin-left: -2.25rem;
+                }
+            }
+        }
+    }
+}

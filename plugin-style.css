@@ -1,0 +1,18 @@
+.ajax_mn_filters {
+  display: flex;
+}
+.ajax_mn_filters .ajax_mn_filter {
+  width: 200px;
+}
+.ajax_mn_filters .ajax_mn_filter .ms-drop {
+  position: relative;
+}
+.ajax_mn_filters .ajax_mn_filter .ms-drop ul li {
+  padding: 0;
+  height: 0px;
+}
+.ajax_mn_filters .ajax_mn_filter .ms-drop ul li input {
+  margin-left: -2.25rem;
+}
+
+/*# sourceMappingURL=plugin-style.css.map */
