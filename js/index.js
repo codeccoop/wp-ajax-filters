@@ -38,9 +38,8 @@ window.addEventListener("DOMContentLoaded", function () {
 			cache: "no-cache",
 		}).then((res) => res.text())
 		.then((html) => {
-			debugger;
 			//console.log("Un canvi");
-			document.querySelector(".ajax_mn_content").innerText = html;
+			document.querySelector(".ajax_mn_content").innerHTML = html;
 		});
 	}
 	

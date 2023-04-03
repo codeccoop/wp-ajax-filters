@@ -15,13 +15,49 @@ if (!function_exists('ajax_mn_filter')) {
             //if (isset($key, ['page', 'nonce', 'action'])) continue;
             $categories[$key] = $_GET[$key];
         }
-
+        $split_genero = explode(",", $categories['genero']);
+        $split_metraje = explode(",", $categories['metraje']);
+        $split_pueblo = explode(",", $categories['pueblo_indigena']);
+        $split_tematica = explode(",", $categories['tematica']);
+        $split_zona = explode(",", $categories['zona_geografica']);
+        //throw new Exception(print_r($split_metraje));
+        //$array_genero =  explode(",", $categories['genero']);
         // Get query arguments
-        $args = apply_filters('ajax_mn_query_args', array(
+        $args = array(
             'post_type' => 'pelicula',
             'post_status' => 'publish',
             'posts_per_page' => -1,
-        ));
+            'tax_query' => array(
+                // 'relation' => 'AND',
+                array(
+                    'taxonomy' => 'genero',
+                    'field'    => 'slug',
+                    'terms' => $split_genero
+                ),
+                array(
+                    'taxonomy' => 'metraje',
+                    'field'    => 'slug',
+                    'terms' => $split_metraje
+                ),
+                array(
+                    'taxonomy' => 'pueblo_indigena',
+                    'field'    => 'slug',
+                    'terms' => $split_pueblo
+                ),
+                array(
+                    'taxonomy' => 'tematica',
+                    'field'    => 'slug',
+                    'terms' => $split_tematica
+                ),
+                array(
+                    'taxonomy' => 'zona_geografica',
+                    'field'    => 'slug',
+                    'terms' => $split_zona
+                )
+
+            )
+
+        );
 
         // Execute the query
         $query = new WP_Query($args);
@@ -34,12 +70,16 @@ if (!function_exists('ajax_mn_filter')) {
         //     'pages' => 0
         // );
 
-        $html = 'Hello';
+        $html = '';
         // Loop over the query results
         while ($query->have_posts()) {
-            // $query->the_post();
-            // $ID = get_the_ID();
-            // $thumbnail = get_the_post_thumbnail_url($ID, 'medium');
+            $query->the_post();
+            $ID = get_the_ID();
+            $thumbnail = get_the_post_thumbnail($ID, '');
+            //$html .= '<div class="test">';
+            //$html .= $ID;
+            //$html .= get_the_title();
+            //$html .= '</div>';
             // if (!$thumbnail) {
             //     $thumbnail = get_template_directory_uri() . '/assets/images/event--default.png';
             // }
@@ -56,7 +96,12 @@ if (!function_exists('ajax_mn_filter')) {
             //     'tag' => get_the_tags($ID),
             //     'lang' => pll_get_post_language($ID)
             // ));
-            //$html .= mn_render_filtered_post($post);
+            //$html .= mn_render_filtered_post();
+            ob_start();
+            $html .= pods('pelicula', $ID)->template('Search Película');
+            $html .= ob_get_contents();
+            ob_clean();
+            //throw new Exception(print_r($split_metraje));
         }
 
         // wp_send_json($data, 200);
@@ -69,7 +114,7 @@ if (!function_exists('ajax_mn_filter')) {
         // return '<div class="post">' . $the_post->title() . '</div>';
         ob_start();
         //get_template_part('template-parts/content', apply_filter('ajax_mn_list_template', 'post-list'));
-        pods('pelicula', get_the_id())->template('Search Película');
+        pods('pelicula', $ID)->template('Search Película');
         $html = ob_get_contents();
         ob_clean();
         return $html;

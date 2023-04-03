@@ -2,7 +2,7 @@
 function ajax_mn_filters()
 {
     $taxonomies = get_taxonomies();
-    //throw new Exception (print_r($taxonomies));
+    //throw new Exception(print_r($taxonomies));
     $taxonomies = array_slice($taxonomies, 10, 17);
     $taxonomies = array_diff($taxonomies, ["produccion", "realizacion", "cataleg"]);
     $html = '<div class="ajax_mn_filters">';
