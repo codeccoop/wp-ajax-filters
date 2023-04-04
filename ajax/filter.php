@@ -97,10 +97,10 @@ if (!function_exists('ajax_mn_filter')) {
             //     'lang' => pll_get_post_language($ID)
             // ));
             //$html .= mn_render_filtered_post();
-            ob_start();
+            //ob_start();
             $html .= pods('pelicula', $ID)->template('Search Película');
-            $html .= ob_get_contents();
-            ob_clean();
+            //$html .= ob_get_contents();
+            //ob_clean();
             //throw new Exception(print_r($split_metraje));
         }
 

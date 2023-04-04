@@ -5,13 +5,13 @@ function ajax_mn_filters()
     //throw new Exception(print_r($taxonomies));
     $taxonomies = array_slice($taxonomies, 10, 17);
     $taxonomies = array_diff($taxonomies, ["produccion", "realizacion", "cataleg"]);
-    $html = '<div class="ajax_mn_filters">';
+    $html = '<div class="ajax_mn_filters alignwide">';
     foreach ($taxonomies as $taxonomy) {
         $html .= '<div class="ajax_mn_filtercont">';
         $html .= '<label for="' . $taxonomy . '">' . $taxonomy . '</label>';
         $html .= '<select class="ajax_mn_filter" id="' . $taxonomy . '" multiple="multiple"">';
         $terms = get_terms($taxonomy);
-        $html .= '<option selected="selected" >selecciona un valor </option>';
+        //$html .= '<option selected="selected" >selecciona un valor </option>';
         foreach ($terms as $term) {
             $html .= '<option value="' . $term->name . '">' . $term->name . '</option>';
         }
@@ -27,7 +27,7 @@ function ajax_mn_filters()
             })
         });
     </script>';
-    $html .= '<div class="ajax_mn_content"></div>';
+    $html .= '<div class="ajax_mn_content alignwide"></div>';
 
     return $html;
 }

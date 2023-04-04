@@ -2,13 +2,43 @@ window.addEventListener("DOMContentLoaded", function () {
 	
 	document.querySelectorAll(wp_ajax.selector).forEach((select) => {
 		jQuery( select ).multipleSelect({
+			selectAll: true,
+			displayTitle: true,
+			minimumCountSelected: 1,
+			filter: true,
+			filterPlaceholder: `escribe la categoría`,
+			filterAcceptOnEnter: true,
+			showClear: true,
+			animate: 'slide',
+
 			onClick: onSelectionChange,
-			onCheckAll: () => setTimeout(onSelectionChange, 0)
+			onCheckAll: () => setTimeout(onSelectionChange, 0),
+			onUncheckAll: () => setTimeout(onSelectionChange, 0),
+			formatSelectAll: function () {
+    			return 'Seleccionar todo';
+  			},
+			formatAllSelected: function () {
+    			return 'Todas';
+  			},
+			formatCountSelected: function (count, total) {
+    			return count + ' de ' + total + ' seleccionadas';
+  			},
+			
+			onAfterCreate: () => {
+				onSelectionChange();
+				hideDropOnStart();
+			}
 		});
  
 	});
 	
 
+	function hideDropOnStart(){
+		const msDrop = document.getElementsByClassName("ms-drop");
+		Array.from(msDrop).map((div) => {
+			div.style.display="none";
+		})
+	}
 	function getSelection() {
 		return Object.fromEntries(
 			Array.from(document.querySelectorAll(wp_ajax.selector)).map((select) => {
@@ -16,7 +46,7 @@ window.addEventListener("DOMContentLoaded", function () {
 			})
 		);
 	}
-
+	
 	function onSelectionChange() {
 		const query = new URLSearchParams();
 		query.append("action", "filter");

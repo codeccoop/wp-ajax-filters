@@ -2,10 +2,18 @@
   display: flex;
 }
 .ajax_mn_filters .ajax_mn_filter {
-  width: 200px;
+  margin-left: 3rem;
+  display: block;
+  width: 210px;
+  max-width: 210px;
+  position: relative;
 }
 .ajax_mn_filters .ajax_mn_filter .ms-drop {
-  position: relative;
+  position: absolute;
+  display: inline flow-root list-item;
+  z-index: 1000;
+  max-width: 200px;
+  max-height: 400px;
 }
 .ajax_mn_filters .ajax_mn_filter .ms-drop ul li {
   padding: 0;
@@ -13,6 +21,19 @@
 }
 .ajax_mn_filters .ajax_mn_filter .ms-drop ul li input {
   margin-left: -2.25rem;
+}
+
+.ajax_mn_content {
+  min-height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
+}
+.ajax_mn_content > article {
+  position: relative;
+  margin: 3rem 1rem;
+  flex-basis: 31%;
 }
 
 /*# sourceMappingURL=plugin-style.css.map */
