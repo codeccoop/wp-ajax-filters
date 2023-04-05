@@ -2,13 +2,14 @@
 function ajax_mn_filters()
 {
     $taxonomies = get_taxonomies();
-    //throw new Exception(print_r($taxonomies));
+    $names = get_taxonomy_labels($taxonomies[2]);
+
     $taxonomies = array_slice($taxonomies, 10, 17);
     $taxonomies = array_diff($taxonomies, ["produccion", "realizacion", "cataleg"]);
     $html = '<div class="ajax_mn_filters alignwide">';
     foreach ($taxonomies as $taxonomy) {
         $html .= '<div class="ajax_mn_filtercont">';
-        $html .= '<label for="' . $taxonomy . '">' . $taxonomy . '</label>';
+        $html .= '<label for="' . $taxonomy . '">' . get_taxonomy($taxonomy)->labels->name . '</label>';
         $html .= '<select class="ajax_mn_filter" id="' . $taxonomy . '" multiple="multiple"">';
         $terms = get_terms($taxonomy);
         //$html .= '<option selected="selected" >selecciona un valor </option>';

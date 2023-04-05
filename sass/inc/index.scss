@@ -1,17 +1,39 @@
 .ajax_mn_filters{
     display: flex;
-    .ajax_mn_filter{
+    .ajax_mn_filtercont{
+        width: 210px;
+        height: 80px;
+        border: 1px solid #7CCD90;
+        color: #7CCD90;
+        background-color: rgb(0,0,0,0.2);
+        border-radius: 4px;
+      &:not(:first-child){
         margin-left: 3rem;
+      }
+      >label {
+        margin: 1rem 0;
+        text-align: center;
+      }
+      .ajax_mn_filter{
+        //margin-left: 3rem;
         display: block;
         width: 210px;
         max-width: 210px;
         position: relative;
+        button.ms-choice{
+            background-color: transparent;
+            border: none;
+            color: grey;
+        }
+        
         .ms-drop{
             position: absolute;
             display: inline flow-root list-item;
             z-index: 1000;
             max-width: 200px;
             max-height: 400px;
+            background-color: rgb(0,0,0,0.8);
+            color: white;
             ul li {
                 padding: 0;
                 height: 0px;
@@ -21,6 +43,8 @@
             }
         }
     }
+    }
+    
 }
 .ajax_mn_content{
     min-height: 40vh;

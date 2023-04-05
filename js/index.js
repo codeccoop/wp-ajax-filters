@@ -10,6 +10,7 @@ window.addEventListener("DOMContentLoaded", function () {
 			filterAcceptOnEnter: true,
 			showClear: true,
 			animate: 'slide',
+			placeholder: 'selecciona',
 
 			onClick: onSelectionChange,
 			onCheckAll: () => setTimeout(onSelectionChange, 0),
