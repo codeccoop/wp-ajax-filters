@@ -1,8 +1,8 @@
 .ajax_mn_filters{
     display: flex;
     .ajax_mn_filtercont{
-        width: 210px;
-        height: 80px;
+        width: auto;
+        height: 45px;
         border: 1px solid #7CCD90;
         color: #7CCD90;
         background-color: rgb(0,0,0,0.2);
@@ -11,26 +11,43 @@
         margin-left: 3rem;
       }
       >label {
-        margin: 1rem 0;
-        text-align: center;
+        margin: 1rem 2rem;
+        text-align: left;
+        
       }
       .ajax_mn_filter{
         //margin-left: 3rem;
         display: block;
         width: 210px;
         max-width: 210px;
-        position: relative;
+        //position: absolute;
+        //top: 0;
+        margin: 1rem 0;
         button.ms-choice{
             background-color: transparent;
             border: none;
             color: grey;
+            position: absolute;
+            top:-35px;
+    
+            span{
+                display: none;
+            }
+            div.icon-caret{
+                //display: none;           
+            }
+            div.icon-close{
+                right: 8px;
+                display: none;
+            }
         }
         
         .ms-drop{
+            //margin-top: 1.2rem;
             position: absolute;
             display: inline flow-root list-item;
             z-index: 1000;
-            max-width: 200px;
+            max-width: 210px;
             max-height: 400px;
             background-color: rgb(0,0,0,0.8);
             color: white;

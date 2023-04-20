@@ -2,8 +2,8 @@
   display: flex;
 }
 .ajax_mn_filters .ajax_mn_filtercont {
-  width: 210px;
-  height: 80px;
+  width: auto;
+  height: 45px;
   border: 1px solid #7CCD90;
   color: #7CCD90;
   background-color: rgba(0, 0, 0, 0.2);
@@ -13,25 +13,34 @@
   margin-left: 3rem;
 }
 .ajax_mn_filters .ajax_mn_filtercont > label {
-  margin: 1rem 0;
-  text-align: center;
+  margin: 1rem 2rem;
+  text-align: left;
 }
 .ajax_mn_filters .ajax_mn_filtercont .ajax_mn_filter {
   display: block;
   width: 210px;
   max-width: 210px;
-  position: relative;
+  margin: 1rem 0;
 }
 .ajax_mn_filters .ajax_mn_filtercont .ajax_mn_filter button.ms-choice {
   background-color: transparent;
   border: none;
   color: grey;
+  position: absolute;
+  top: -35px;
+}
+.ajax_mn_filters .ajax_mn_filtercont .ajax_mn_filter button.ms-choice span {
+  display: none;
+}
+.ajax_mn_filters .ajax_mn_filtercont .ajax_mn_filter button.ms-choice div.icon-close {
+  right: 8px;
+  display: none;
 }
 .ajax_mn_filters .ajax_mn_filtercont .ajax_mn_filter .ms-drop {
   position: absolute;
   display: inline flow-root list-item;
   z-index: 1000;
-  max-width: 200px;
+  max-width: 210px;
   max-height: 400px;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;

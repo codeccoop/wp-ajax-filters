@@ -10,53 +10,80 @@ if (!function_exists('ajax_mn_filter')) {
 
         // Get the page from the search params with 1 as fallback value
         //$page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $categories = array();
-        foreach (array_keys($_GET) as $key) {
+        //$taxonomies = array();
+        $tax_query = array();
+        foreach (array_keys($_GET) as $taxonomy) {
             //if (isset($key, ['page', 'nonce', 'action'])) continue;
-            $categories[$key] = $_GET[$key];
+            if ($taxonomy == "action" || $taxonomy == "nonce" || $taxonomy == "") {
+                continue;
+            }
+            $tax_keys = array_filter(explode(",", $_GET[$taxonomy]), function ($cat) {
+                return $cat !== '';
+            });
+            if (sizeof($tax_keys)) {
+                $terms = $tax_keys;
+            } else {
+                $terms = array_map(function ($term) {
+                    return $term->slug;
+                }, get_terms($taxonomy));
+            }
+            $tax_query[] = array(
+                'taxonomy' => $taxonomy,
+                'field'    => 'slug',
+                'terms' => $terms
+            );
         }
-        $split_genero = explode(",", $categories['genero']);
-        $split_metraje = explode(",", $categories['metraje']);
-        $split_pueblo = explode(",", $categories['pueblo_indigena']);
-        $split_tematica = explode(",", $categories['tematica']);
-        $split_zona = explode(",", $categories['zona_geografica']);
-        //throw new Exception(print_r($split_metraje));
+        echo print_r($tax_query);
+        // $split_genero = array_filter(explode(",", $categories['genero']), function ($cat) {
+        //     return $cat !== '';
+        // });
+        // $split_metraje = explode(",", $categories['metraje']);
+        // $split_pueblo = explode(",", $categories['pueblo_indigena']);
+        // $split_tematica = explode(",", $categories['tematica']);
+        // $split_zona = explode(",", $categories['zona_geografica']);
+        // //throw new Exception(print_r($split_metraje));
         //$array_genero =  explode(",", $categories['genero']);
         // Get query arguments
+
+        // if (sizeof($split_genero)) {
+
+        //     $tax_query[] = array(
+        //         'taxonomy' => 'genero',
+        //         'field'    => 'slug',
+        //         'terms' => $split_genero
+        //     );
+        // }
+        // $tax_query[] = array(
+        //     'taxonomy' => 'genero',
+        //     'field'    => 'slug',
+        //     'terms' => $split_genero
+        // );
+        // $tax_query[] = array(
+        //     'taxonomy' => 'metraje',
+        //     'field'    => 'slug',
+        //     'terms' => $split_metraje
+        // );
+        // $tax_query[] = array(
+        //     'taxonomy' => 'pueblo_indigena',
+        //     'field'    => 'slug',
+        //     'terms' => $split_pueblo
+        // );
+        // $tax_query[] = array(
+        //     'taxonomy' => 'tematica',
+        //     'field'    => 'slug',
+        //     'terms' => $split_tematica
+        // );
+        // $tax_query[] = array(
+        //     'taxonomy' => 'zona_geografica',
+        //     'field'    => 'slug',
+        //     'terms' => $split_zona
+        // );
+
         $args = array(
             'post_type' => 'pelicula',
             'post_status' => 'publish',
             'posts_per_page' => -1,
-            'tax_query' => array(
-                // 'relation' => 'AND',
-                array(
-                    'taxonomy' => 'genero',
-                    'field'    => 'slug',
-                    'terms' => $split_genero
-                ),
-                array(
-                    'taxonomy' => 'metraje',
-                    'field'    => 'slug',
-                    'terms' => $split_metraje
-                ),
-                array(
-                    'taxonomy' => 'pueblo_indigena',
-                    'field'    => 'slug',
-                    'terms' => $split_pueblo
-                ),
-                array(
-                    'taxonomy' => 'tematica',
-                    'field'    => 'slug',
-                    'terms' => $split_tematica
-                ),
-                array(
-                    'taxonomy' => 'zona_geografica',
-                    'field'    => 'slug',
-                    'terms' => $split_zona
-                )
-
-            )
-
+            'tax_query' => $tax_query
         );
 
         // Execute the query

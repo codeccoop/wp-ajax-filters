@@ -14,7 +14,7 @@ function ajax_mn_filters()
         $terms = get_terms($taxonomy);
         //$html .= '<option selected="selected" >selecciona un valor </option>';
         foreach ($terms as $term) {
-            $html .= '<option value="' . $term->name . '">' . $term->name . '</option>';
+            $html .= '<option value="' . $term->slug . '">' . $term->name . '</option>';
         }
         $html .= '</select>';
         $html .= '</div>';

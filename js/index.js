@@ -11,6 +11,7 @@ window.addEventListener("DOMContentLoaded", function () {
 			showClear: true,
 			animate: 'slide',
 			placeholder: 'selecciona',
+			//openOnHover: true,
 
 			onClick: onSelectionChange,
 			onCheckAll: () => setTimeout(onSelectionChange, 0),
@@ -18,9 +19,9 @@ window.addEventListener("DOMContentLoaded", function () {
 			formatSelectAll: function () {
     			return 'Seleccionar todo';
   			},
-			formatAllSelected: function () {
-    			return 'Todas';
-  			},
+			// formatAllSelected: function () {
+    		// 	return 'Todas';
+  			// },
 			formatCountSelected: function (count, total) {
     			return count + ' de ' + total + ' seleccionadas';
   			},
