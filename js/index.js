@@ -1,4 +1,8 @@
 window.addEventListener("DOMContentLoaded", function () {
+
+	const searchField = document.getElementsByClassName("search-field")[0];
+	const searchSubmit = document.getElementsByClassName("search-submit")[0];
+
 	
 	document.querySelectorAll(wp_ajax.selector).forEach((select) => {
 		jQuery( select ).multipleSelect({
@@ -34,6 +38,7 @@ window.addEventListener("DOMContentLoaded", function () {
  
 	});
 	
+	searchSubmit.addEventListener("click", onSelectionChange);
 
 	function hideDropOnStart(){
 		const msDrop = document.getElementsByClassName("ms-drop");
@@ -59,7 +64,9 @@ window.addEventListener("DOMContentLoaded", function () {
 		Object.keys(selection).forEach((key) =>
 			query.append(key, selection[key])
 		);
-
+		if (searchField.value !== "") {
+			query.append("search-field", searchField.value);
+		} 
 		const url = `${wp_ajax.url}?${query.toString()}`;
 		console.log(url);
 		fetch(url, {

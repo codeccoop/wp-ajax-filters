@@ -1,12 +1,20 @@
 <?php
 function ajax_mn_filters()
 {
+
+    //$html = '<form role="search" method="get" class="search-form" action="' . home_url('/') . '">';
+    //$html .= '<label>';
+    //$html .= '<span class="screen-reader-text">' . _x('Search for:', 'label') . '</span>';
+    $html = '<input type="text" class="search-field" placeholder="' . esc_attr_x('busca tu pelicula …', 'placeholder') . '" . name="search"/>';
+    //$html .= '</label>';
+    $html .= '<button class="search-submit">' . esc_attr_x('Search', 'submit button') . '</button>';
+
     $taxonomies = get_taxonomies();
     $names = get_taxonomy_labels($taxonomies[2]);
 
     $taxonomies = array_slice($taxonomies, 10, 17);
     $taxonomies = array_diff($taxonomies, ["produccion", "realizacion", "cataleg"]);
-    $html = '<div class="ajax_mn_filters alignwide">';
+    $html .= '<div class="ajax_mn_filters alignwide">';
     foreach ($taxonomies as $taxonomy) {
         $html .= '<div class="ajax_mn_filtercont">';
         $html .= '<label for="' . $taxonomy . '">' . get_taxonomy($taxonomy)->labels->name . '</label>';
