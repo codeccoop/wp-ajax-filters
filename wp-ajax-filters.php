@@ -26,20 +26,20 @@ function waf_enqueue_scripts()
     wp_register_script(
         'waf-tax-filter',
         plugin_dir_url(__FILE__) . '/js/waf-tax-filter.js',
-        [],
+        ['jquery'],
         WAF_VERSION,
     );
 
     wp_register_script(
         'waf-searcher',
         plugin_dir_url(__FILE__) . 'js/waf-searcher.js',
-        [],
+        ['jquery'],
         WAF_VERSION,
     );
 
     wp_localize_script(
         'waf-tax-filter',
-        'wp_ajax',
+        '_wafTaxSearchSafeguard',
         [
             'nonce' => wp_create_nonce('waf-tax-filter'),
             'url' => admin_url('admin-ajax.php'),
@@ -48,7 +48,7 @@ function waf_enqueue_scripts()
 
     wp_localize_script(
         'waf-search',
-        'wp_ajax',
+        '_wafSearchSafeguard',
         [
             'nonce' => wp_create_nonce('waf-search'),
             'url' => admin_url('admin-ajax.php'),
