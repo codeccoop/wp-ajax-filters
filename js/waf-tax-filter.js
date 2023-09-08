@@ -33,8 +33,13 @@ window.addEventListener("DOMContentLoaded", function () {
       el: select,
       placeholder: label.textContent,
       onChange: (field, ev) => {
-        if (ev.selected) state[field] = state[field].concat([ev.value]);
-        else state[field] = state[field].filter((val) => val !== ev.value);
+        if (ev.isMulti) {
+          if (ev.selected) state[field] = ev.value;
+          else state[field] = [];
+        } else {
+          if (ev.selected) state[field] = state[field].concat([ev.value]);
+          else state[field] = state[field].filter((val) => val !== ev.value);
+        }
       },
     });
 
@@ -44,16 +49,24 @@ window.addEventListener("DOMContentLoaded", function () {
   function _multiSelect({ el, placeholder, onChange, ...settings }) {
     return jQuery(el).multipleSelect({
       selectAll: true,
-      displayTitle: true,
+      classes: "waf-multi-select",
+      classPrefix: "waf",
       minimumCountSelected: 1,
       showClear: true,
       animate: "slide",
       placeholder: placeholder,
       onClick: (ev) => onChange(el.name, ev),
-      onCheckAll: (ev) => setTimeout(() => onChange(el.name, ev), 0),
-      onUncheckAll: (ev) => setTimeout(() => onChange(el.name, ev), 0),
+      onCheckAll: () => onChange(el.name, new MultiEvent(el.children, true)),
+      onUncheckAll: () => onChange(el.name, new MultiEvent(el.children, false)),
       ...settings,
     });
+  }
+
+  function MultiEvent(options, selected) {
+    const event = { isMulti: true, selected };
+    if (selected) event.value = Array.from(options).map((opt) => opt.value);
+    else event.value = [];
+    return event;
   }
 
   function FilterForm() {
@@ -118,95 +131,27 @@ window.addEventListener("DOMContentLoaded", function () {
     const query = this.serializeState();
     this.fetch(query).then((html) => {
       const selector = this.el.getAttribute("for");
+      const container = document.querySelector(selector);
+      this.el.dispatchEvent(
+        new CustomEvent("waf:fetch", {
+          detail: {
+            content: html,
+            el: container,
+          },
+        })
+      );
       document.querySelector(selector).innerHTML = html;
+      this.el.dispatchEvent(
+        new CustomEvent("waf:render", {
+          detail: {
+            content: html,
+            el: container,
+          },
+        })
+      );
     });
   };
 
   const form = new FilterForm();
   form.render();
-
-  //const searchField = document.getElementsByClassName("search-field")[0];
-  //const searchSubmit = document.getElementsByClassName("search-submit")[0];
-
-  //document.querySelectorAll(wp_ajax.selector).forEach((select) => {
-  //  jQuery(select).multipleSelect({
-  //    selectAll: true,
-  //    displayTitle: true,
-  //    minimumCountSelected: 1,
-  //    filter: true,
-  //    filterPlaceholder: `escribe la categoría`,
-  //    filterAcceptOnEnter: true,
-  //    showClear: true,
-  //    animate: "slide",
-  //    placeholder: "selecciona",
-  //    //openOnHover: true,
-
-  //    onClick: onSelectionChange,
-  //    onCheckAll: () => setTimeout(onSelectionChange, 0),
-  //    onUncheckAll: () => setTimeout(onSelectionChange, 0),
-  //    formatSelectAll: function () {
-  //      return "Seleccionar todo";
-  //    },
-  //    // formatAllSelected: function () {
-  //    // 	return 'Todas';
-  //    // },
-  //    formatCountSelected: function (count, total) {
-  //      return count + " de " + total + " seleccionadas";
-  //    },
-
-  //    onAfterCreate: () => {
-  //      onSelectionChange();
-  //      hideDropOnStart();
-  //    },
-  //  });
-  //});
-
-  //searchSubmit.addEventListener("click", onSelectionChange);
-
-  //function hideDropOnStart() {
-  //  const msDrop = document.getElementsByClassName("ms-drop");
-  //  Array.from(msDrop).map((div) => {
-  //    div.style.display = "none";
-  //  });
-  //}
-
-  //function getSelection() {
-  //  return Object.fromEntries(
-  //    Array.from(document.querySelectorAll(wp_ajax.selector)).map((select) => {
-  //      return [
-  //        select.id,
-  //        Array.from(select.children)
-  //          .filter((opt) => opt.selected)
-  //          .map((opt) => opt.value),
-  //      ];
-  //    })
-  //  );
-  //}
-
-  //function onSelectionChange() {
-  //  const query = new URLSearchParams();
-  //  query.append("action", "filter");
-  //  query.append("nonce", wp_ajax.nonce);
-
-  //  const selection = getSelection();
-  //  console.log(selection);
-  //  Object.keys(selection).forEach((key) => query.append(key, selection[key]));
-  //  if (searchField.value !== "") {
-  //    query.append("search-field", searchField.value);
-  //  }
-  //  const url = `${wp_ajax.url}?${query.toString()}`;
-  //  console.log(url);
-  //  fetch(url, {
-  //    method: "GET",
-  //    headers: {
-  //      Accept: "application/json",
-  //    },
-  //    cache: "no-cache",
-  //  })
-  //    .then((res) => res.text())
-  //    .then((html) => {
-  //      //console.log("Un canvi");
-  //      document.querySelector(".ajax_mn_content").innerHTML = html;
-  //    });
-  //}
 });

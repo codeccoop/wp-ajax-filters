@@ -64,15 +64,5 @@ function waf_enqueue_scripts()
         '1.13.1'
     );
 
-    wp_enqueue_style('waf-style', plugins_url('style.css', __FILE__));
     wp_enqueue_style('jquery-ui-theme', 'https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css');
-}
-
-
-
-add_filter('ajax_mn_localize_args', 'my_theme_localize_args');
-function my_theme_localize_args($args)
-{
-    $args['options'] = array(1, 2, 3);
-    return $args;
 }
