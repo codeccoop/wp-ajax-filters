@@ -40,14 +40,12 @@ function waf_ajax_waf_tax_filter()
     ];
 
     $query = new WP_Query($args);
-    $html = '';
     while ($query->have_posts()) {
         $query->the_post();
         $post_id = get_the_ID();
-        $html .= apply_filters('waf_template', apply_filters("waf_template_{$post_type}", '', $post_id), $post_id);
+        $html = apply_filters('waf_template', apply_filters("waf_template_{$post_type}", '', $post_id), $post_id);
+        if ($html) echo $html;
     }
-
-    echo $html;
     wp_die();
 }
 

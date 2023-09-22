@@ -19,7 +19,6 @@ function waf_tax_filter($atts = [])
     }));
 
     if (!wp_script_is('waf-tax-filter')) wp_enqueue_script('waf-tax-filter');
-
     ob_start(); ?>
     <div class="waf-filter-form" aria-controls="<?= $atts['el']; ?>">
         <?php foreach ($taxonomies as $tax) : ?>
@@ -43,7 +42,7 @@ function waf_tax_filter($atts = [])
     return ob_get_clean();
 }
 
-add_shortcode('waf_tax_filter', 'waf_tax_filter');
+add_shortcode('waf_searcher', 'waf_searcher');
 function waf_searcher()
 {
     try {

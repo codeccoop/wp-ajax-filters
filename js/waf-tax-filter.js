@@ -130,7 +130,7 @@ window.addEventListener("DOMContentLoaded", function () {
   FilterForm.prototype.render = function () {
     const query = this.serializeState();
     this.fetch(query).then((html) => {
-      const selector = this.el.getAttribute("for");
+      const selector = this.el.getAttribute("aria-controls");
       const container = document.querySelector(selector);
       this.el.dispatchEvent(
         new CustomEvent("waf:fetch", {
