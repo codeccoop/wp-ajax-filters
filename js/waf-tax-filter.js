@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   function _multiSelect({ el, placeholder, onChange, ...settings }) {
     return jQuery(el).multipleSelect({
-      selectAll: true,
+      selectAll: false,
       classes: "waf-multi-select",
       classPrefix: "waf",
       minimumCountSelected: 1,
