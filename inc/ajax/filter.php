@@ -7,10 +7,13 @@ function waf_ajax_waf_tax_filter()
 {
     check_ajax_referer('waf-tax-filter', 'nonce');
 
-    $post_type = $_GET['post_type'];
+    $relation = isset($_GET['relation']) ? $_GET['relation'] : 'OR';
+    $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
+    $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : -1;
+    $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
     $tax_query = [];
     foreach (array_keys($_GET) as $taxonomy) {
-        if (in_array($taxonomy, ['action', 'nonce', 'template', 'post_type', ''])) continue;
+        if (in_array($taxonomy, ['action', 'nonce', 'template', 'post_type', 'per_page', 'offset', ''])) continue;
 
         $values = array_values(array_filter(explode(',', $_GET[$taxonomy]), function ($val) {
             return $val !== '';
@@ -29,23 +32,34 @@ function waf_ajax_waf_tax_filter()
             'field' => 'slug',
             'operator' => 'IN',
             'terms' => $terms,
+            'include_children' => false,
         ];
     }
 
     $args = [
         'post_type' => $post_type,
         'post_status' => 'publish',
-        'posts_per_page' => -1,
-        'tax_query' => $tax_query
+        'posts_per_page' => $per_page,
+        'offset' => $offset,
+        'tax_query' => [
+            'relation' => $relation,
+            $tax_query
+        ]
     ];
 
     $query = new WP_Query($args);
+
+    if ($per_page !== -1) {
+        header('WAF-PAGES: ' . ceil($query->found_posts / $per_page));
+    }
+
     while ($query->have_posts()) {
         $query->the_post();
         $post_id = get_the_ID();
         $html = apply_filters('waf_template', apply_filters("waf_template_{$post_type}", '', $post_id), $post_id);
         if ($html) echo $html;
     }
+
     wp_die();
 }
 

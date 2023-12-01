@@ -7,6 +7,8 @@ function waf_tax_filter($atts = [])
         if (!isset($atts['taxonomies'])) throw new Exception('Em fan falte les taxonomies');
         if (!isset($atts['el'])) throw new Exception('Em falta el selector css del contingut');
         if (!isset($atts['post_type'])) $atts['post_type'] = 'post';
+        if (isset($atts['per_page'])) $atts['per_page'] = (int) $atts['per_page'];
+        else $atts['per_page'] = -1;
     } catch (Exception $e) {
         return '[' . $e->getMessage() . ']';
     }
@@ -36,6 +38,7 @@ function waf_tax_filter($atts = [])
         <div class="waf-filter-field" data-type="hidden" style="display: none">
             <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
         </div>
+        <div class="waf-filter-pager" data-perpage="<?= $atts['per_page'] ?>"></div>
     </div>
 <?php
 
