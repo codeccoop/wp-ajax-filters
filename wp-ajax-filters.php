@@ -25,21 +25,21 @@ function waf_enqueue_scripts()
 {
     wp_register_script(
         'waf-tax-filter',
-        plugin_dir_url(__FILE__) . '/js/waf-tax-filter.js',
+        plugin_dir_url(__FILE__) . '/js/tax-filter.js',
         ['jquery'],
         WAF_VERSION,
     );
 
     wp_register_script(
         'waf-searcher',
-        plugin_dir_url(__FILE__) . 'js/waf-searcher.js',
+        plugin_dir_url(__FILE__) . 'js/searcher.js',
         ['jquery'],
         WAF_VERSION,
     );
 
     wp_localize_script(
         'waf-tax-filter',
-        '_wafTaxSearchSafeguard',
+        '_wafTaxFilterSafeguard',
         [
             'nonce' => wp_create_nonce('waf-tax-filter'),
             'url' => admin_url('admin-ajax.php'),
@@ -47,10 +47,10 @@ function waf_enqueue_scripts()
     );
 
     wp_localize_script(
-        'waf-search',
+        'waf-searcher',
         '_wafSearchSafeguard',
         [
-            'nonce' => wp_create_nonce('waf-search'),
+            'nonce' => wp_create_nonce('waf-searcher'),
             'url' => admin_url('admin-ajax.php'),
         ]
     );
@@ -65,4 +65,16 @@ function waf_enqueue_scripts()
     );
 
     wp_enqueue_style('jquery-ui-theme', 'https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css');
+}
+
+add_filter('script_loader_tag', 'waf_script_module', 10, 3);
+function waf_script_module($tag, $handle, $src)
+{
+    if (!in_array($handle, ['waf-tax-filter', 'waf-searcher'])) {
+        return $tag;
+    }
+
+    $url = esc_url($src);
+    $tag = "<script type='module' src='{$url}'></script>";
+    return $tag;
 }

@@ -24,7 +24,7 @@ function waf_tax_filter($atts = [])
     ob_start(); ?>
     <div class="waf-filter-form" aria-controls="<?= $atts['el']; ?>">
         <?php foreach ($taxonomies as $tax) : ?>
-            <div class="waf-filter-field" data-type="select" id="<?= $tax->name; ?>">
+            <div class="waf-control" data-type="select" id="<?= $tax->name; ?>">
                 <label for="<?= $tax->name; ?>"><?= $tax->label ?></label>
                 <select name="<?= $tax->name; ?>" multiple>
                     <?php
@@ -35,10 +35,10 @@ function waf_tax_filter($atts = [])
                 </select>
             </div>
         <?php endforeach; ?>
-        <div class="waf-filter-field" data-type="hidden" style="display: none">
+        <div class="waf-control" data-type="hidden" style="display: none">
             <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
         </div>
-        <div class="waf-filter-pager" data-perpage="<?= $atts['per_page'] ?>"></div>
+        <div class="waf-pager" data-perpage="<?= $atts['per_page'] ?>"></div>
     </div>
 <?php
 
@@ -46,27 +46,31 @@ function waf_tax_filter($atts = [])
 }
 
 add_shortcode('waf_searcher', 'waf_searcher');
-function waf_searcher()
+function waf_searcher($atts = [])
 {
     try {
         if (!isset($atts['el'])) throw new Exception('Em falta el selector css del contingut');
         if (!isset($atts['post_type'])) $atts['post_type'] = 'post';
+        if (isset($atts['per_page'])) $atts['per_page'] = (int) $atts['per_page'];
+        else $atts['per_page'] = -1;
     } catch (Exception $e) {
         return '[' . $e->getMessage() . ']';
     }
 
+    if (!wp_script_is('waf-searcher')) wp_enqueue_script('waf-searcher');
     ob_start(); ?>
-    <div class="waf-filter-form" aria-controls="<?= $atts['el']; ?>">
-        <div class="waf-filter-field" data-type="text" id="search_term">
-            <label for="search-pattern"><?= __('search', 'wp-ajax-filters'); ?></label>
-            <input name="search_term" type="text" />
+    <div class="waf-search-form" aria-controls="<?= $atts['el']; ?>">
+        <div class="waf-control" data-type="text" id="search_pattern">
+            <label for="search-pattern"><?= __('search'); ?></label>
+            <input name="search_pattern" type="text" />
         </div>
-        <div class="waf-filter-field" data-type="hidden" style="display: none">
+        <div class="waf-control" data-type="hidden" style="display: none">
             <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
         </div>
-        <div class="waf-filter-field" data-type="submit">
-            <input type="submit" value="<?= __('submit', 'wp-ajax-filters'); ?>" />
+        <div class="waf-control" data-type="submit">
+            <input type="submit" value="<?= __('submit'); ?>" />
         </div>
+        <div class="waf-pager" data-perpage="<?= $atts['per_page'] ?>"></div>
     </div>
 <?php
 

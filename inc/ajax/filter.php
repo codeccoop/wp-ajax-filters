@@ -7,7 +7,6 @@ function waf_ajax_waf_tax_filter()
 {
     check_ajax_referer('waf-tax-filter', 'nonce');
 
-    $relation = isset($_GET['relation']) ? $_GET['relation'] : 'OR';
     $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
     $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : -1;
     $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
