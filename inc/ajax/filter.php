@@ -63,6 +63,7 @@ function waf_ajax_waf_tax_filter()
 }
 
 add_filter('waf_template', function ($html, $post_id) {
+    if ($html) return $html;
     return '<div class="waf-single">
         <a href="' . get_post_permalink($post_id) . '"><h3>' . get_the_title($post_id) . '</h3></a>
         <p>' . get_the_excerpt($post_id) . '</p>

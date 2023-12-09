@@ -23,20 +23,22 @@ function waf_tax_filter($atts = [])
     if (!wp_script_is('waf-tax-filter')) wp_enqueue_script('waf-tax-filter');
     ob_start(); ?>
     <div class="waf-filter-form" aria-controls="<?= $atts['el']; ?>">
-        <?php foreach ($taxonomies as $tax) : ?>
-            <div class="waf-control" data-type="select" id="<?= $tax->name; ?>">
-                <label for="<?= $tax->name; ?>"><?= $tax->label ?></label>
-                <select name="<?= $tax->name; ?>" multiple>
-                    <?php
-                    $terms = get_terms($tax->name);
-                    foreach ($terms as $term) : ?>
-                        <option value="<?= $term->slug; ?>"><?= $term->name; ?></option>
-                    <?php endforeach; ?>
-                </select>
+        <div class="waf-filter-controls">
+            <?php foreach ($taxonomies as $tax) : ?>
+                <div class="waf-control" data-type="select" id="<?= $tax->name; ?>">
+                    <label for="<?= $tax->name; ?>"><?= $tax->label ?></label>
+                    <select name="<?= $tax->name; ?>" multiple>
+                        <?php
+                        $terms = get_terms(['taxonomy' => $tax->name, 'hide_empty' => true]);
+                        foreach ($terms as $term) : ?>
+                            <option value="<?= $term->slug; ?>"><?= $term->name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php endforeach; ?>
+            <div class="waf-control" data-type="hidden" style="display: none">
+                <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
             </div>
-        <?php endforeach; ?>
-        <div class="waf-control" data-type="hidden" style="display: none">
-            <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
         </div>
         <div class="waf-pager" data-perpage="<?= $atts['per_page'] ?>"></div>
     </div>
