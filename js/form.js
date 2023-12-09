@@ -11,7 +11,7 @@ function WafForm({ sel, url, action, nonce }) {
   this.hidden = [];
   this.controls = [];
 
-  this.pager = new Pager(this.el, this.render.bind(this));
+  this.pager = new Pager({ onChange: this.render.bind(this) });
   this.state = Array.from(this.el.querySelectorAll(".waf-control")).reduce(
     (state, control) => this.bindControlToState(state, control),
     {}

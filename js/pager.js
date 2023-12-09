@@ -1,27 +1,28 @@
-function Pager(form, onChange) {
-  this.el = form.querySelector(".waf-pager");
-  this.perPage = Number(this.el.dataset.perpage);
-  console.log(this.el);
-  this.onChange = onChange || (() => {});
+function Pager({ onChange }) {
+  this.el = document.querySelector(".waf-pager");
 
-  let _current = 0;
+  let _attached = Boolean(this.el);
+  let _current = _attached ? 0 : null;
   Object.defineProperty(this, "current", {
     get: () => _current,
     set: (val) => {
-      if (val === _current) return;
+      if (val === _current || _current === null) return;
       _current = Math.max(0, Math.min(this.pages - 1, val));
       onChange(_current);
     },
   });
 
-  let _pages = 0;
+  let _pages = _attached ? 0 : null;
   Object.defineProperty(this, "pages", {
     get: () => _pages,
     set: (val) => {
-      if (val == _pages) return;
+      if (val == _pages || _pages === null) return;
       _pages = Number(val);
     },
   });
+
+  this.perPage = _attached ? Number(this.el.dataset.perpage) : null;
+  this.onChange = onChange || (() => {});
 }
 
 Pager.prototype.getVisible = function () {
@@ -35,19 +36,27 @@ Pager.prototype.getVisible = function () {
     visible = Array.apply(null, Array(3)).map((_, i) => this.current - 1 + i);
   }
 
-  return visible.filter((p) => p <= this.pages - 1);
+  visible = visible.filter((p) => p <= this.pages - 1);
+  if (this.current > 2) visible = [0, -1].concat(visible);
+  if (this.current < this.pages - 2) visible = visible.concat([-1, this.pages - 1]);
+  return visible;
 };
 
 Pager.prototype.render = function () {
-  // if (this.pages <= 1) return;
+  if (this.current === null) return;
   const nav = document.createElement("nav");
   nav.classList.add("waf-nav-pager");
   const pageList = this.getVisible().reduce((list, p) => {
     const page = document.createElement("li");
-    page.classList.add("waf-page");
-    if (p === this.current) page.classList.add("current");
-    page.textContent = p + 1;
-    page.addEventListener("click", () => (this.current = p));
+    if (p === -1) {
+      page.classList.add("waf-ellipsis");
+      page.textContent = "...";
+    } else {
+      page.classList.add("waf-page");
+      page.textContent = p + 1;
+      if (p === this.current) page.classList.add("current");
+      page.addEventListener("click", () => (this.current = p));
+    }
     list.appendChild(page);
     return list;
   }, document.createElement("ul"));
