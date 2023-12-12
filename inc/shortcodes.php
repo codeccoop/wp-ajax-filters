@@ -24,7 +24,7 @@ function waf_tax_filter($atts = [])
         <div class="waf-controls">
             <?php foreach ($taxonomies as $tax) : ?>
                 <div class="waf-control" data-type="select" id="<?= $tax->name; ?>">
-                    <label for="<?= $tax->name; ?>"><?= $tax->label ?></label>
+                    <label for="<?= $tax->name; ?>"><?= __($tax->label) ?></label>
                     <select name="<?= $tax->name; ?>" multiple>
                         <?php
                         $terms = get_terms(['taxonomy' => $tax->name, 'hide_empty' => true]);
