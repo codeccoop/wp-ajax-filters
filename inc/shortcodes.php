@@ -4,9 +4,15 @@ add_shortcode('waf_tax_filter', 'waf_tax_filter');
 function waf_tax_filter($atts = [])
 {
     try {
-        if (!isset($atts['taxonomies'])) throw new Exception('Em fan falte les taxonomies');
-        if (!isset($atts['el'])) throw new Exception('Em falta el selector css del contingut');
-        if (!isset($atts['post_type'])) $atts['post_type'] = 'post';
+        if (!isset($atts['taxonomies'])) {
+            throw new Exception(__('Em fan falte les taxonomies', 'waf'));
+        }
+        if (!isset($atts['el'])) {
+            throw new Exception(__('Em falta el selector css del contingut', 'waf'));
+        }
+        if (!isset($atts['post_type'])) {
+            $atts['post_type'] = 'post';
+        }
     } catch (Exception $e) {
         return '[' . $e->getMessage() . ']';
     }
@@ -18,7 +24,10 @@ function waf_tax_filter($atts = [])
         return in_array($tax->name, $tax_names);
     }));
 
-    if (!wp_script_is('waf-tax-filter')) wp_enqueue_script('waf-tax-filter');
+    if (!wp_script_is('waf-tax-filter')) {
+        wp_enqueue_script('waf-tax-filter');
+    }
+
     ob_start(); ?>
     <div class="waf-filter-form" aria-controls="<?= $atts['el']; ?>">
         <div class="waf-controls">
@@ -28,7 +37,7 @@ function waf_tax_filter($atts = [])
                     <select name="<?= $tax->name; ?>" multiple>
                         <?php
                         $terms = get_terms(['taxonomy' => $tax->name, 'hide_empty' => true]);
-                        foreach ($terms as $term) : ?>
+                foreach ($terms as $term) : ?>
                             <option value="<?= $term->slug; ?>"><?= $term->name; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -48,25 +57,40 @@ add_shortcode('waf_searcher', 'waf_searcher');
 function waf_searcher($atts = [])
 {
     try {
-        if (!isset($atts['el'])) throw new Exception('Em falta el selector css del contingut');
-        if (!isset($atts['post_type'])) $atts['post_type'] = 'post';
+        if (!isset($atts['el'])) {
+            throw new Exception('Em falta el selector css del contingut');
+        }
+
+        if (!isset($atts['post_type'])) {
+            $atts['post_type'] = 'post';
+        }
+
+        if (!isset($atts['taxonomies'])) {
+            $atts['taxonomies'] = [];
+        } else {
+            $atts['taxonomies'] = array_map(function ($tax) {
+                return trim($tax);
+            }, explode(',', $atts['taxonomies']));
+        }
     } catch (Exception $e) {
         return '[' . $e->getMessage() . ']';
     }
 
-    if (!wp_script_is('waf-searcher')) wp_enqueue_script('waf-searcher');
+    if (!wp_script_is('waf-searcher')) {
+        wp_enqueue_script('waf-searcher');
+    }
+
     ob_start(); ?>
     <div class="waf-search-form" aria-controls="<?= $atts['el']; ?>">
         <div class="waf-controls">
-            <div class="waf-control" data-type="text" id="search_pattern">
-                <label for="search-pattern"><?= __('search'); ?></label>
-                <input name="search_pattern" type="text" />
+            <div class="waf-control" data-type="text" id="pattern">
+                <input name="pattern" type="text" placeholder="<?= __('search', 'waf') ?>"/>
             </div>
             <div class="waf-control" data-type="hidden" style="display: none">
                 <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
             </div>
             <div class="waf-control" data-type="submit">
-                <input type="submit" value="<?= __('submit'); ?>" />
+                <input type="submit" value="<?= __('submit', 'waf'); ?>" />
             </div>
         </div>
     </div>

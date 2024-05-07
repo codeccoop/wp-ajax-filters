@@ -6,7 +6,7 @@
  * Description:     Archive filters by wp ajax requests
  * Author:          Còdec Coop
  * Author URI:      https://www.codeccoop.org
- * Text Domain:     wp-ajax-filters
+ * Text Domain:     waf
  * Domain Path:     /languages
  * Version:         0.1.0
  *
@@ -16,16 +16,16 @@
 define('WAF_VERSION', '0.1.0');
 define('WAF_ENV', 'development');
 
-require_once plugin_dir_path(__FILE__) . 'inc/ajax/filter.php';
-require_once plugin_dir_path(__FILE__) . 'inc/ajax/search.php';
-require_once plugin_dir_path(__FILE__) . 'inc/shortcodes.php';
+require_once 'inc/ajax/filter.php';
+require_once 'inc/ajax/search.php';
+require_once 'inc/shortcodes.php';
 
 add_action('wp_enqueue_scripts', 'waf_enqueue_scripts');
 function waf_enqueue_scripts()
 {
     wp_register_script(
         'waf-tax-filter',
-        plugin_dir_url(__FILE__) . '/js/tax-filter.js',
+        plugin_dir_url(__FILE__) . 'js/tax-filter.js',
         ['jquery'],
         WAF_VERSION,
     );
@@ -58,13 +58,14 @@ function waf_enqueue_scripts()
     wp_enqueue_script(
         'jquery-ui',
         'https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js',
-        array(
-            'jquery'
-        ),
+        ['jquery'],
         '1.13.1'
     );
 
-    wp_enqueue_style('jquery-ui-theme', 'https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css');
+    wp_enqueue_style(
+        'jquery-ui-theme',
+        'https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css',
+    );
 }
 
 add_filter('script_loader_tag', 'waf_script_module', 10, 3);
@@ -78,3 +79,13 @@ function waf_script_module($tag, $handle, $src)
     $tag = "<script type='module' src='{$url}'></script>";
     return $tag;
 }
+
+add_filter('waf_template', function ($html, $post_id) {
+    if ($html) {
+        return $html;
+    }
+    return '<div class="waf-single">
+        <a href="' . get_post_permalink($post_id) . '"><h3>' . get_the_title($post_id) . '</h3></a>
+        <p>' . get_the_excerpt($post_id) . '</p>
+    </div>';
+}, 10, 2);

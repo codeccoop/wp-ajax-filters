@@ -6,3 +6,5 @@ node_modules/
 *.sql
 *.sqlite
 .wp-env.json
+.php-cs-fixer.cache
+.nvimrc

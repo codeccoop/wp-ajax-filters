@@ -14,7 +14,7 @@ function WafForm({ sel, url, action, nonce }) {
   this.pager = new Pager({ onChange: this.render.bind(this) });
   this.state = Array.from(this.el.querySelectorAll(".waf-control")).reduce(
     (state, control) => this.bindControlToState(state, control),
-    {}
+    {},
   );
 }
 
@@ -48,28 +48,38 @@ WafForm.prototype.fetch = function (query) {
     },
     cache: "no-cache",
   }).then((res) => {
-    return res.text().then((html) => ({ pages: res.headers.get("Waf-Pages"), html }));
+    return res
+      .text()
+      .then((html) => ({ pages: res.headers.get("Waf-Pages"), html }));
   });
 };
 
 WafForm.prototype.render = function (page = 0) {
   this.pager.current = page;
   const query = this.serializeState();
-  this.fetch(query).then(({ pages, html }) => {
-    this.pager.pages = pages;
-    this.pager.render();
-    const selector = this.el.getAttribute("aria-controls");
-    const container = document.querySelector(selector);
-    const args = {
-      page: this.pager.current,
-      pages,
-      html,
-      el: container,
-    };
-    this.el.dispatchEvent(new CustomEvent("waf:fetch", { detail: args }));
-    container.innerHTML = args.html;
-    this.el.dispatchEvent(new CustomEvent("waf:render", { detail: args }));
-  });
+  const selector = this.el.getAttribute("aria-controls");
+  const container = document.querySelector(selector);
+  const args = {
+    page: this.pager.current,
+    el: container,
+  };
+
+  container.innerHTML = "<p>Loading</p>";
+  this.el.dispatchEvent(new CustomEvent("waf:prepare", { detail: args }));
+
+  this.fetch(query)
+    .then(({ pages, html }) => {
+      args.pages = pages;
+      args.html = html;
+      this.pager.pages = pages;
+      this.pager.render();
+      this.el.dispatchEvent(new CustomEvent("waf:fetch", { detail: args }));
+      container.innerHTML = html;
+      this.el.dispatchEvent(new CustomEvent("waf:render", { detail: args }));
+    })
+    .cath((err) => {
+      this.el.dispatchEvent(new CustomEvent("waf:error", { detail: args }));
+    });
 };
 
 WafForm.prototype.bindControlToState = function (state, control) {
@@ -88,7 +98,11 @@ WafForm.prototype.bindControlToState = function (state, control) {
       break;
     case "select":
       this.controls.push(
-        Controls.bindMultiSelect({ state, control, onChange: () => this.render() })
+        Controls.bindMultiSelect({
+          state,
+          control,
+          onChange: () => this.render(),
+        }),
       );
       break;
     default:
