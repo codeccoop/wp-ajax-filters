@@ -1,0 +1,49 @@
+# Copyright (C) 2024 Còdec Cooperativa
+# This file is distributed under the same license as the WP Ajax Filters plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Ajax Filters 1.0.0\n"
+"Report-Msgid-Bugs-To: https://git.coopdevs.org/codeccoop/wp/plugins/wp-ajax-filters\n"
+"Last-Translator: Lucas García <lucas@codeccoop.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-01-23T18:24:08+00:00\n"
+"PO-Revision-Date: 2024-05-01 19:31+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: waf\n"
+
+#. Plugin Name of the plugin
+msgid "WP Ajax Filters"
+msgstr "WP Ajax Filters"
+
+#. Plugin URI of the plugin
+msgid "https://git.coopdevs.org/codeccoop/wp/wp-ajax-filters"
+msgstr "https://git.coopdevs.org/codeccoop/wp/wp-ajax-filters"
+
+#. Description of the plugin
+msgid "Dynamic post filters via ajax requests"
+msgstr "Filtres de posts dinàmics via peticions ajax"
+
+#. Author of the plugin
+msgid "Còdec Cooperativa"
+msgstr "Còdec Cooperativa"
+
+#. Author URI of the plugin
+msgid "https://www.codeccoop.org"
+msgstr "https://www.codeccoop.org"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "What are you looking for?"
+msgstr "Què estàs buscant?"
+
+msgid "I need the taxonomies"
+msgstr "Necesito les taxonomies"
+
+msgid "I need the css selector of the content"
+msgstr "Necesito el selector css del contingut"
+
+msgid "No matches founds"
+msgstr "No s'han trobat resultats"

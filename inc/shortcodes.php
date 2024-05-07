@@ -5,10 +5,10 @@ function waf_tax_filter($atts = [])
 {
     try {
         if (!isset($atts['taxonomies'])) {
-            throw new Exception(__('Em fan falte les taxonomies', 'waf'));
+            throw new Exception(__('I need the taxonomies', 'waf'));
         }
         if (!isset($atts['el'])) {
-            throw new Exception(__('Em falta el selector css del contingut', 'waf'));
+            throw new Exception(__('I need the css selector of the content', 'waf'));
         }
         if (!isset($atts['post_type'])) {
             $atts['post_type'] = 'post';
@@ -33,7 +33,7 @@ function waf_tax_filter($atts = [])
         <div class="waf-controls">
             <?php foreach ($taxonomies as $tax) : ?>
                 <div class="waf-control" data-type="select" id="<?= $tax->name; ?>">
-                    <label for="<?= $tax->name; ?>"><?= __($tax->label) ?></label>
+                    <label for="<?= $tax->name; ?>"><?= __($tax->label, 'waf') ?></label>
                     <select name="<?= $tax->name; ?>" multiple>
                         <?php
                         $terms = get_terms(['taxonomy' => $tax->name, 'hide_empty' => true]);
@@ -84,13 +84,13 @@ function waf_searcher($atts = [])
     <div class="waf-search-form" aria-controls="<?= $atts['el']; ?>">
         <div class="waf-controls">
             <div class="waf-control" data-type="text" id="pattern">
-                <input name="pattern" type="text" placeholder="<?= __('search', 'waf') ?>"/>
+                <input name="pattern" type="text" placeholder="<?= __('What are you looking for?', 'waf') ?>"/>
             </div>
             <div class="waf-control" data-type="hidden" style="display: none">
                 <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
             </div>
             <div class="waf-control" data-type="submit">
-                <input type="submit" value="<?= __('submit', 'waf'); ?>" />
+                <input type="submit" value="<?= __('Search', 'waf'); ?>" />
             </div>
         </div>
     </div>

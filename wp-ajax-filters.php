@@ -89,3 +89,19 @@ add_filter('waf_template', function ($html, $post_id) {
         <p>' . get_the_excerpt($post_id) . '</p>
     </div>';
 }, 10, 2);
+
+add_action('init', 'waf_load_textdomain');
+function waf_load_textdomain()
+{
+    load_plugin_textdomain('waf', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+
+add_filter('load_textdomain_mofile', 'waf_textdomain', 10, 2);
+function waf_textdomain($mofile, $domain)
+{
+    if ('waf' === $domain && false !== strpos($mofile, WP_LANG_DIR . '/plugins/')) {
+        $locale = apply_filters('plugin_locale', determine_locale(), $domain);
+        $mofile = WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)) . '/languages/' . $domain . '-' . $locale . '.mo';
+    }
+    return $mofile;
+}
