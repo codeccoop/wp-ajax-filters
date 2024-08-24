@@ -10,10 +10,13 @@ function waf_ajax_tax_filter()
     $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
     $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : -1;
     $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+    $year = isset($_GET['year']) ? $_GET['year'] : null;
     $tax_query = [];
 
+    
+
     foreach (array_keys($_GET) as $taxonomy) {
-        if (in_array($taxonomy, ['action', 'nonce', 'template', 'post_type', 'per_page', 'offset', ''])) {
+        if (in_array($taxonomy, ['action', 'nonce', 'template', 'post_type', 'per_page', 'offset','year', ''])) {
             continue;
         }
 
@@ -36,6 +39,21 @@ function waf_ajax_tax_filter()
             'terms' => $terms,
             'include_children' => false,
         ];
+        if($year){
+            $tax_query[] = [
+              
+           
+                    'taxonomy' => 'any_sessio',
+                    'field' => 'slug',
+                    'operator' => 'IN',
+                    'terms' => array($year),
+                    'include_children' => false,
+
+               
+            ];
+        };
+
+        error_log(print_r($tax_query));
     }
 
     $args = [

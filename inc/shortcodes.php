@@ -13,6 +13,9 @@ function waf_tax_filter($atts = [])
         if (!isset($atts['post_type'])) {
             $atts['post_type'] = 'post';
         }
+        if (!isset($atts['year'])) {
+            $atts['year'] = null;
+        }
     } catch (Exception $e) {
         return '[' . $e->getMessage() . ']';
     }
@@ -46,6 +49,11 @@ function waf_tax_filter($atts = [])
             <div class="waf-control" data-type="hidden" style="display: none">
                 <input type="text" name="post_type" value="<?= $atts['post_type']; ?>" />
             </div>
+            <?php if($atts['year'])  {?>      
+            <div class="waf-control" data-type="hidden" style="display: none">
+                <input type="text" name="year" value="<?= $atts['year']; ?>" />
+            </div>
+            <?php } ?>
         </div>
     </div>
 <?php

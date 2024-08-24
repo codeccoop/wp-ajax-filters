@@ -8,3 +8,4 @@ node_modules/
 .wp-env.json
 .php-cs-fixer.cache
 .nvimrc
+.vscode
