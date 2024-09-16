@@ -52,8 +52,6 @@ function waf_ajax_tax_filter()
                
             ];
         };
-
-        error_log(print_r($tax_query));
     }
 
     $args = [
