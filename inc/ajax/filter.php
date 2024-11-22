@@ -59,6 +59,15 @@ function waf_ajax_tax_filter()
         'post_status' => 'publish',
         'posts_per_page' => $per_page,
         'offset' => $offset,
+        'orderby' => 'meta_value',
+        'order' => 'ASC',
+        'meta_query' => [
+                [
+                    'key' => 'date',
+                    'value'   => array(''),
+                    'compare' => 'NOT IN' 
+                ]
+                ],
         'tax_query' => [
             'relation' => 'AND',
             $tax_query
@@ -66,6 +75,7 @@ function waf_ajax_tax_filter()
     ];
 
     $query = new WP_Query($args);
+    error_log(print_r($query->have_posts(), true));
 
     if ($per_page !== -1) {
         header('WAF-PAGES: ' . ceil($query->found_posts / $per_page));
